@@ -35,3 +35,20 @@ query{
 	}
 }
 ```
+
+### Get comapny/org data
+```
+{
+  book: organization(login: "the-road-to-learn-react") {
+    ...sharedOrganizationFields
+  }
+  company: organization(login: "facebook") {
+    ...sharedOrganizationFields
+  }
+}
+
+fragment sharedOrganizationFields on Organization {
+  name
+  url
+}
+```
