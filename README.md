@@ -36,7 +36,7 @@ query{
 }
 ```
 
-### Get comapny/org data
+### Get company/org data
 ```
 {
   book: organization(login: "the-road-to-learn-react") {
@@ -50,5 +50,60 @@ query{
 fragment sharedOrganizationFields on Organization {
   name
   url
+}
+```
+
+### Get repository ID and Name
+```
+query {
+  organization(login: "the-road-to-learn-react") {
+    name
+    url
+    repository(name: "the-road-to-learn-react") {
+      id
+      name
+    }
+  }
+}
+```
+
+### Add start to a GItHub repo
+Query:
+```
+mutation AddStar($repositoryId: ID!) {
+  addStar(input: {starrableId: $repositoryId}) {
+    starrable {
+      id
+      viewerHasStarred
+    }
+  }
+}
+```
+
+Variables:
+```
+{
+	"repositoryId":"MDEwOlJlcG9zaXRvcnk2MzM1MjkwNw=="
+}
+```
+
+### Get list of repos with pagination
+```
+query OrganizationForLearningReact {
+  organization(login: "spring-projects") {
+    name
+    url
+    repositories(first: 5, after:"Y3Vyc29yOnYyOpHOABBeoA==") {
+      edges {
+        node {
+          name
+        }
+      }
+	pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
 }
 ```
