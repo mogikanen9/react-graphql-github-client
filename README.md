@@ -1,6 +1,9 @@
 # react-graphql-github-client
 GitHub client built with React.js based on [A complete React with GraphQL Tutorial](https://www.robinwieruch.de/react-with-graphql-tutorial/).
 
+## Tech stack
+Client setup using [https://github.com/Microsoft/TypeScript-React-Starter](https://github.com/Microsoft/TypeScript-React-Starter).
+
 ## Sample queries to GitHub GraphQL APi (v4):
 
 ### Get schema (the only GET request)
