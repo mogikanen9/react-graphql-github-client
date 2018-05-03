@@ -1,5 +1,8 @@
+import { Repository } from "../../../service/model/Repository";
+
 interface IViewListProps {
-    orgName:string;
+    orgName: string;
+    repos: Repository[];
 }
 
-export {IViewListProps};
+export { IViewListProps };

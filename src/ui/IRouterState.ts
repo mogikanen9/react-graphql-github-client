@@ -1,6 +1,8 @@
+import { Repository } from "../service/model/Repository";
+
 interface IRouterState {
     isLoading: boolean;
-    repositories: string[];
+    repositories: Repository[];
 }
 
 export { IRouterState };
