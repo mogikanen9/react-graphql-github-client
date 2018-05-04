@@ -1,16 +1,17 @@
-const LIST_ORG_REPOS = `query OrganizationForLearningReact {
+const LIST_ORG_REPOS: string = 
+`query OrganizationForLearningReact {
     organization(login: "spring-projects") {
       name
       url
-      repositories(first: 5, after:"Y3Vyc29yOnYyOpHOABBeoA==") {
+      repositories(first: 5) {
         edges {
           node {
             name,
-                      description,
-                      createdAt
+            description,
+            createdAt
           }
         }
-              pageInfo {
+        pageInfo {
           endCursor
           hasNextPage
         }
@@ -18,4 +19,5 @@ const LIST_ORG_REPOS = `query OrganizationForLearningReact {
     }
   }`;
 
-  export {LIST_ORG_REPOS};
+
+export { LIST_ORG_REPOS };

@@ -1,10 +1,10 @@
 import { IClientService } from "./IClientService";
 import { Repository } from "./model/Repository";
-// import { LIST_ORG_REPOS } from "./Queries";
+import { LIST_ORG_REPOS } from "./Queries";
 
-const GITHUB_API_V4 = 'https://api.github.com/graphql';
+ const GITHUB_API_V4 = 'https://api.github.com/graphql';
 
- const REPO_QUERY_BODY = ' { "query": "query { viewer { login }}"} ';
+// const REPO_QUERY_BODY = ' { "query": "query { viewer { login }}"} ';
 
 class ClientServiceGitHub implements IClientService {
 
@@ -27,17 +27,20 @@ class ClientServiceGitHub implements IClientService {
 
             fetch(GITHUB_API_V4,
                 {
-                    // body: LIST_ORG_REPOS,
-                    body: REPO_QUERY_BODY,
+                    
+                     body: JSON.stringify({query: LIST_ORG_REPOS}),
+                    // body: REPO_QUERY_BODY,
                     headers: {
                         'Authorization': 'bearer ' + this.ghAccessToken,
                         'content-type': 'application/json'
                     },
                     method: 'POST'
                 })
-                .then((response) => {
-                    // tslint:disable-next-line:no-console
-                    console.log(response.json());
+                .then((response) => {                   
+                    response.json().then((data)=>{
+                        // tslint:disable-next-line:no-console
+                        console.log(data);
+                    });
                 }).catch((error) => {
                     // tslint:disable-next-line:no-console
                     console.log(error);
