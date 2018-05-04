@@ -10,6 +10,8 @@ class Router extends React.Component<IRouterProps, IRouterState>{
     constructor(props: IRouterProps) {
         super(props);
         this.state = {
+            ghAccessToken: '',
+            isError: false,
             isLoading: false,
             repositories: []
         }
@@ -17,16 +19,25 @@ class Router extends React.Component<IRouterProps, IRouterState>{
 
     public componentDidMount() {
 
-        // const result = new Array<Repository>();
-        // result.push(new Repository('repoA', 'Desc A'));
-        // result.push(new Repository('repoB', 'Desc B'));
-        // this.setState({ isLoading: false, repositories: result });
-
         this.setState({ isLoading: true });
         this.props.clientService.listRepos()
             .then((repos: Repository[]) => {
-                this.setState({ isLoading: false, repositories: repos });
-            }).catch((err) => { this.setState({ isLoading: false }); });
+                this.setState(
+                    {
+                        errorMessage: '',
+                        isError: false,
+                        isLoading: false,
+                        repositories: repos
+                    });
+            }).catch((err) => {
+                this.setState(
+                    {
+                        errorMessage: err,
+                        isError: true,
+                        isLoading: false
+                    }
+                );
+            });
     }
 
     public render() {
@@ -36,7 +47,9 @@ class Router extends React.Component<IRouterProps, IRouterState>{
             repos: this.state.repositories
         };
 
-        if (this.state.isLoading) {
+        if (this.state.isError) {
+            return (<p>Ups! Error '{this.state.errorMessage}'</p>);
+        } else if (this.state.isLoading) {
             return (<p>Loading ...</p>);
         } else {
             return (
