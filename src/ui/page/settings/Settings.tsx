@@ -2,14 +2,17 @@ import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button'
 import { Dialog, DialogContent, DialogFooter, DialogType } from 'office-ui-fabric-react/lib/Dialog';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import * as React from "react";
+import { ISettingsProps } from './ISettingsProps';
 import ISettingsState from "./ISettingsState";
 
 
-class Settings extends React.Component<{}, ISettingsState> {
+class Settings extends React.Component<ISettingsProps, ISettingsState> {
 
-    constructor(props: any) {
+    constructor(props: ISettingsProps) {
         super(props);
-        this.state = { showDialog: true };
+        this.state = { showDialog: true, tokenValue: '' };
+        this.closeDialog = this.closeDialog.bind(this);
+        this.onTokenValueChange = this.onTokenValueChange.bind(this);
     }
 
     public render() {
@@ -30,7 +33,8 @@ class Settings extends React.Component<{}, ISettingsState> {
                 >
                     <DialogContent>
                         <TextField
-                            label='GitHub Access Token'                            
+                            label='GitHub Access Token'
+                            onChanged={this.onTokenValueChange}
                         />
                     </DialogContent>
                     <DialogFooter>
@@ -42,8 +46,13 @@ class Settings extends React.Component<{}, ISettingsState> {
         );
     }
 
-    private closeDialog = (): void => {
+    private onTokenValueChange(newValue: string): void{
+        this.setState({ tokenValue: newValue });
+    }
+
+    private closeDialog(): void{
         this.setState({ showDialog: false });
+        this.props.onSubmit(this.state.tokenValue);
     }
 }
 

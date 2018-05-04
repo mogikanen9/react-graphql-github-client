@@ -1,9 +1,10 @@
 import { IClientService } from "./IClientService";
 import { Repository } from "./model/Repository";
+// import { LIST_ORG_REPOS } from "./Queries";
 
 const GITHUB_API_V4 = 'https://api.github.com/graphql';
 
-const REPO_QUERY_BODY = ' { "query": "query { viewer { login }}"} ';
+ const REPO_QUERY_BODY = ' { "query": "query { viewer { login }}"} ';
 
 class ClientServiceGitHub implements IClientService {
 
@@ -26,6 +27,7 @@ class ClientServiceGitHub implements IClientService {
 
             fetch(GITHUB_API_V4,
                 {
+                    // body: LIST_ORG_REPOS,
                     body: REPO_QUERY_BODY,
                     headers: {
                         'Authorization': 'bearer ' + this.ghAccessToken,
