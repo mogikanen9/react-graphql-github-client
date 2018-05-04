@@ -1,21 +1,47 @@
 import * as React from 'react';
 import './App.css';
+import { IAppState } from './IAppState';
+import { ClientServiceGitHub } from './service/ClientServiceGitHub';
+import { IRouterProps } from './ui/IRouterProps';
+import { ISettingsProps } from './ui/page/settings/ISettingsProps';
+import { Settings } from './ui/page/settings/Settings';
+import { Router } from './ui/Router';
 
-import logo from './logo.svg';
 
-class App extends React.Component {
+class App extends React.Component<{}, IAppState> {
+
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      accessToken: ''
+    };
+    this.updateToken = this.updateToken.bind(this);
+  }
+
+  public componentDidMount() {
+    this.updateToken('');
+  }
+
+  public updateToken(newToken: string): void {
+    this.setState({
+      accessToken: newToken
+    });
+  }
+
   public render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </div>
-    );
+
+    if (this.state.accessToken.length < 1) {
+      const props: ISettingsProps = { onSubmit: this.updateToken };
+      return (<Settings {...props} />);
+    } else {
+      const routerProps: IRouterProps = { clientService: new ClientServiceGitHub(this.state.accessToken) };
+      return (
+        <div className="App">
+          <Router {...routerProps} />
+        </div>
+      );
+    }
+
   }
 }
 
