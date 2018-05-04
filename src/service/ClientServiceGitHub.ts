@@ -1,14 +1,16 @@
 import { IClientService } from "./IClientService";
+import { IRepositoryMapper } from "./IRepositoryMapper";
 import { Repository } from "./model/Repository";
 import { LIST_ORG_REPOS } from "./Queries";
+import { RepositoryMapperGitHub } from "./RepositoryMapperGitHub";
 
- const GITHUB_API_V4 = 'https://api.github.com/graphql';
-
-// const REPO_QUERY_BODY = ' { "query": "query { viewer { login }}"} ';
+const GITHUB_API_V4 = 'https://api.github.com/graphql';
 
 class ClientServiceGitHub implements IClientService {
 
     private ghAccessToken: string;
+
+    private mapper: IRepositoryMapper;
 
     constructor(token: string) {
         if (!token == null || token.length < 1) {
@@ -17,36 +19,31 @@ class ClientServiceGitHub implements IClientService {
             this.ghAccessToken = token;
         }
 
+        this.mapper = new RepositoryMapperGitHub();
     }
 
     public listRepos(): Promise<Repository[]> {
         return new Promise<Repository[]>((resolve, reject) => {
-            const result = new Array<Repository>();
-            result.push(new Repository('repoAA', 'Desc AA'));
-            result.push(new Repository('repoBB', 'Desc BB'));
 
             fetch(GITHUB_API_V4,
                 {
-                    
-                     body: JSON.stringify({query: LIST_ORG_REPOS}),
-                    // body: REPO_QUERY_BODY,
+                    body: JSON.stringify({ query: LIST_ORG_REPOS }),
                     headers: {
                         'Authorization': 'bearer ' + this.ghAccessToken,
                         'content-type': 'application/json'
                     },
                     method: 'POST'
                 })
-                .then((response) => {                   
-                    response.json().then((data)=>{
-                        // tslint:disable-next-line:no-console
-                        console.log(data);
+                .then((response) => {
+                    response.json().then((data) => {
+                        const repos: Repository[] = this.mapper.arrayfromJson(data);
+                        resolve(repos);
+                    }).catch((error) => {
+                        throw new Error(error);
                     });
                 }).catch((error) => {
-                    // tslint:disable-next-line:no-console
-                    console.log(error);
+                    throw new Error(error);
                 });
-
-            resolve(result);
         });
     }
 }

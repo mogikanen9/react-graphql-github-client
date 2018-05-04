@@ -3,7 +3,7 @@ const LIST_ORG_REPOS: string =
     organization(login: "spring-projects") {
       name
       url
-      repositories(first: 5) {
+      repositories(first: 10) {
         edges {
           node {
             name,
