@@ -1,6 +1,7 @@
 import { IClientService } from "./IClientService";
 import { IRepositoryMapper } from "./IRepositoryMapper";
 import { Repository } from "./model/Repository";
+import { RepositoryResultList } from "./model/RepositoryResultList";
 import { LIST_ORG_REPOS } from "./Queries";
 import { RepositoryMapperGitHub } from "./RepositoryMapperGitHub";
 
@@ -22,8 +23,8 @@ class ClientServiceGitHub implements IClientService {
         this.mapper = new RepositoryMapperGitHub();
     }
 
-    public listRepos(): Promise<Repository[]> {
-        return new Promise<Repository[]>((resolve, reject) => {
+    public listRepos(): Promise<RepositoryResultList> {
+        return new Promise<RepositoryResultList>((resolve, reject) => {
 
             fetch(GITHUB_API_V4,
                 {
@@ -37,7 +38,8 @@ class ClientServiceGitHub implements IClientService {
                 .then((response) => {
                     response.json().then((data) => {
                         const repos: Repository[] = this.mapper.arrayfromJson(data);
-                        resolve(repos);
+                        const paginationInfo: [boolean, string] = this.mapper.paginationInfoFromJson(data);
+                        resolve(new RepositoryResultList(repos, paginationInfo[0], paginationInfo[1]));
                     }).catch((error) => {
                         throw new Error(error);
                     });

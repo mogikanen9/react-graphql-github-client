@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Repository } from '../service/model/Repository';
+import { RepositoryResultList } from '../service/model/RepositoryResultList';
 import { IViewListProps } from '../ui/page/repo/IViewListProps';
 import { ViewList } from '../ui/page/repo/ViewList';
 import { IRouterProps } from './IRouterProps';
@@ -11,8 +11,10 @@ class Router extends React.Component<IRouterProps, IRouterState>{
         super(props);
         this.state = {
             ghAccessToken: '',
+            hasNextPage: false,
             isError: false,
             isLoading: false,
+            paginationCursor: '',
             repositories: []
         }
     }
@@ -21,20 +23,24 @@ class Router extends React.Component<IRouterProps, IRouterState>{
 
         this.setState({ isLoading: true });
         this.props.clientService.listRepos()
-            .then((repos: Repository[]) => {
+            .then((result: RepositoryResultList) => {
                 this.setState(
                     {
                         errorMessage: '',
+                        hasNextPage: result.hasNextPage,
                         isError: false,
                         isLoading: false,
-                        repositories: repos
+                        paginationCursor: result.pageCursor,
+                        repositories: result.repos,
                     });
             }).catch((err) => {
                 this.setState(
                     {
                         errorMessage: err,
+                        hasNextPage: false,
                         isError: true,
-                        isLoading: false
+                        isLoading: false,
+                        paginationCursor: ''
                     }
                 );
             });
@@ -43,7 +49,9 @@ class Router extends React.Component<IRouterProps, IRouterState>{
     public render() {
 
         const props: IViewListProps = {
+            hasNextPage: this.state.hasNextPage,
             orgName: 'spring-projects',
+            paginationCursor: this.state.paginationCursor,
             repos: this.state.repositories
         };
 

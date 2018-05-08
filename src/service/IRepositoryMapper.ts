@@ -1,7 +1,7 @@
 import { Repository } from "./model/Repository";
 
 interface IRepositoryMapper {
-    onefromJson(value: string):Repository;
     arrayfromJson(value: string): Repository[];
+    paginationInfoFromJson(value: any): [boolean, string]; // [hasNextPage, cursorId]
 }
 export { IRepositoryMapper };

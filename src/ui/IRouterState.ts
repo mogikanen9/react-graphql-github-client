@@ -6,6 +6,8 @@ interface IRouterState {
     ghAccessToken:string;
     isError: boolean;
     errorMessage?:string;
+    hasNextPage: boolean;
+    paginationCursor: string;
 }
 
 export { IRouterState };

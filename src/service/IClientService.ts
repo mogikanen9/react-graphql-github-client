@@ -1,8 +1,8 @@
-import { Repository } from "./model/Repository";
+import { RepositoryResultList } from "./model/RepositoryResultList";
 
 interface IClientService {
 
-    listRepos(): Promise<Repository[]>;
+    listRepos(): Promise<RepositoryResultList>;
 }
 
 export { IClientService }
