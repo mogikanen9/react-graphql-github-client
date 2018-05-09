@@ -1,5 +1,6 @@
 import { IClientService } from "./IClientService";
 import { IRepositoryMapper } from "./IRepositoryMapper";
+import { PaginationInfo } from "./model/PaginationInfo";
 import { Repository } from "./model/Repository";
 import { RepositoryResultList } from "./model/RepositoryResultList";
 import { LIST_ORG_REPOS } from "./Queries";
@@ -38,8 +39,8 @@ class ClientServiceGitHub implements IClientService {
                 .then((response) => {
                     response.json().then((data) => {
                         const repos: Repository[] = this.mapper.arrayfromJson(data);
-                        const paginationInfo: [boolean, string] = this.mapper.paginationInfoFromJson(data);
-                        resolve(new RepositoryResultList(repos, paginationInfo[0], paginationInfo[1]));
+                        const paginationInfo: PaginationInfo = this.mapper.paginationInfoFromJson(data);
+                        resolve(new RepositoryResultList(repos, paginationInfo));
                     }).catch((error) => {
                         throw new Error(error);
                     });

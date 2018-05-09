@@ -1,4 +1,5 @@
 import { IRepositoryMapper } from "./IRepositoryMapper";
+import { PaginationInfo } from "./model/PaginationInfo";
 import { Repository } from "./model/Repository";
 
 class RepositoryMapperGitHub implements IRepositoryMapper {
@@ -16,11 +17,9 @@ class RepositoryMapperGitHub implements IRepositoryMapper {
         return rs;
     }
 
-    public paginationInfoFromJson(value: any): [boolean, string] {
-        let rs: [boolean, string] = [false, 'NA'];
+    public paginationInfoFromJson(value: any): PaginationInfo {
         const pageInfo: any = value.data.organization.repositories.pageInfo;
-        rs = [pageInfo.hasNextPage, pageInfo.endCursor];
-        return rs;
+        return new PaginationInfo(pageInfo.hasNextPage, pageInfo.endCursor);
     }
 }
 

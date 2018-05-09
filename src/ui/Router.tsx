@@ -1,9 +1,12 @@
 import * as React from 'react';
+import { PaginationInfo } from '../service/model/PaginationInfo';
 import { RepositoryResultList } from '../service/model/RepositoryResultList';
 import { IViewListProps } from '../ui/page/repo/IViewListProps';
 import { ViewList } from '../ui/page/repo/ViewList';
 import { IRouterProps } from './IRouterProps';
 import { IRouterState } from './IRouterState';
+
+const EMPTY_PAGINATION: PaginationInfo = new PaginationInfo(false, '');
 
 class Router extends React.Component<IRouterProps, IRouterState>{
 
@@ -11,10 +14,9 @@ class Router extends React.Component<IRouterProps, IRouterState>{
         super(props);
         this.state = {
             ghAccessToken: '',
-            hasNextPage: false,
             isError: false,
             isLoading: false,
-            paginationCursor: '',
+            repoPagination: EMPTY_PAGINATION,
             repositories: []
         }
     }
@@ -27,20 +29,18 @@ class Router extends React.Component<IRouterProps, IRouterState>{
                 this.setState(
                     {
                         errorMessage: '',
-                        hasNextPage: result.hasNextPage,
                         isError: false,
                         isLoading: false,
-                        paginationCursor: result.pageCursor,
+                        repoPagination: result.paginationInfo,
                         repositories: result.repos,
                     });
             }).catch((err) => {
                 this.setState(
                     {
                         errorMessage: err,
-                        hasNextPage: false,
                         isError: true,
                         isLoading: false,
-                        paginationCursor: ''
+                        repoPagination: EMPTY_PAGINATION
                     }
                 );
             });
@@ -49,9 +49,11 @@ class Router extends React.Component<IRouterProps, IRouterState>{
     public render() {
 
         const props: IViewListProps = {
-            hasNextPage: this.state.hasNextPage,
+            hasNextPage: 
+                this.state.repoPagination ? this.state.repoPagination.hasNextPage : false,
             orgName: 'spring-projects',
-            paginationCursor: this.state.paginationCursor,
+            paginationCursor:
+                this.state.repoPagination ? this.state.repoPagination.pageCursor : '',
             repos: this.state.repositories
         };
 

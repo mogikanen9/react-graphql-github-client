@@ -1,3 +1,4 @@
+import { PaginationInfo } from "../service/model/PaginationInfo";
 import { Repository } from "../service/model/Repository";
 
 interface IRouterState {
@@ -6,8 +7,7 @@ interface IRouterState {
     ghAccessToken:string;
     isError: boolean;
     errorMessage?:string;
-    hasNextPage: boolean;
-    paginationCursor: string;
+    repoPagination?:PaginationInfo;
 }
 
 export { IRouterState };
