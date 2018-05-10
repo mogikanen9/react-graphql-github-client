@@ -2,7 +2,7 @@ import { RepositoryResultList } from "./model/RepositoryResultList";
 
 interface IClientService {
 
-    listRepos(): Promise<RepositoryResultList>;
+    listRepos(itemsPerPage:number, pageCursor?:string): Promise<RepositoryResultList>;
 }
 
 export { IClientService }

@@ -7,6 +7,7 @@ import { IRouterProps } from './IRouterProps';
 import { IRouterState } from './IRouterState';
 
 const EMPTY_PAGINATION: PaginationInfo = new PaginationInfo(false, '');
+const DEFAULT_PAGE_SIZE = 10;
 
 class Router extends React.Component<IRouterProps, IRouterState>{
 
@@ -24,7 +25,7 @@ class Router extends React.Component<IRouterProps, IRouterState>{
     public componentDidMount() {
 
         this.setState({ isLoading: true });
-        this.props.clientService.listRepos()
+        this.props.clientService.listRepos(DEFAULT_PAGE_SIZE)
             .then((result: RepositoryResultList) => {
                 this.setState(
                     {

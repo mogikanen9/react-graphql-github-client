@@ -3,7 +3,7 @@ import { IRepositoryMapper } from "./IRepositoryMapper";
 import { PaginationInfo } from "./model/PaginationInfo";
 import { Repository } from "./model/Repository";
 import { RepositoryResultList } from "./model/RepositoryResultList";
-import { LIST_ORG_REPOS } from "./Queries";
+import { buildOrganizationRepoQuery } from "./Queries";
 import { RepositoryMapperGitHub } from "./RepositoryMapperGitHub";
 
 const GITHUB_API_V4 = 'https://api.github.com/graphql';
@@ -24,12 +24,13 @@ class ClientServiceGitHub implements IClientService {
         this.mapper = new RepositoryMapperGitHub();
     }
 
-    public listRepos(): Promise<RepositoryResultList> {
+    public listRepos(itemsPerPage: number, pageCursor?: string): Promise<RepositoryResultList> {
         return new Promise<RepositoryResultList>((resolve, reject) => {
 
+            const queryString = buildOrganizationRepoQuery(itemsPerPage, pageCursor);
             fetch(GITHUB_API_V4,
                 {
-                    body: JSON.stringify({ query: LIST_ORG_REPOS }),
+                    body: JSON.stringify({ query: queryString }),
                     headers: {
                         'Authorization': 'bearer ' + this.ghAccessToken,
                         'content-type': 'application/json'
