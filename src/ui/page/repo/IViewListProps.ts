@@ -5,6 +5,7 @@ interface IViewListProps {
     repos: Repository[];
     paginationCursor: string;
     hasNextPage: boolean;
+    onNext():void;
 }
 
 export { IViewListProps };

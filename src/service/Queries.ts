@@ -4,7 +4,7 @@ function buildOrganizationRepoQuery(itemsPerPage: number, cursorId?: string): st
     organization(login: "spring-projects") {
       name
       url
-      repositories(first: ${itemsPerPage}, after "${cursorId}") {
+      repositories(first: ${itemsPerPage}, after: "${cursorId}") {
         edges {
           node {
             name,

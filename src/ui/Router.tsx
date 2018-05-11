@@ -20,6 +20,8 @@ class Router extends React.Component<IRouterProps, IRouterState>{
             repoPagination: EMPTY_PAGINATION,
             repositories: []
         }
+
+        this.nextRepoPage = this.nextRepoPage.bind(this);
     }
 
     public componentDidMount() {
@@ -47,15 +49,17 @@ class Router extends React.Component<IRouterProps, IRouterState>{
             });
     }
 
+
     public render() {
 
         const props: IViewListProps = {
-            hasNextPage: 
+            hasNextPage:
                 this.state.repoPagination ? this.state.repoPagination.hasNextPage : false,
-            orgName: 'spring-projects',
+            onNext: this.nextRepoPage,
+            orgName: 'spring-projects',            
             paginationCursor:
-                this.state.repoPagination ? this.state.repoPagination.pageCursor : '',
-            repos: this.state.repositories
+                this.state.repoPagination ? this.state.repoPagination.pageCursor : '',            
+            repos: this.state.repositories            
         };
 
         if (this.state.isError) {
@@ -69,6 +73,31 @@ class Router extends React.Component<IRouterProps, IRouterState>{
                 </>
             );
         };
+    }
+
+    protected nextRepoPage(): void {
+        this.setState({ isLoading: true });
+        this.props.clientService.listRepos(DEFAULT_PAGE_SIZE,
+            this.state.repoPagination?this.state.repoPagination.pageCursor:undefined)
+            .then((result: RepositoryResultList) => {
+                this.setState(
+                    {
+                        errorMessage: '',
+                        isError: false,
+                        isLoading: false,
+                        repoPagination: result.paginationInfo,
+                        repositories: result.repos,
+                    });
+            }).catch((err) => {
+                this.setState(
+                    {
+                        errorMessage: err,
+                        isError: true,
+                        isLoading: false,
+                        repoPagination: EMPTY_PAGINATION
+                    }
+                );
+            });
     }
 }
 
