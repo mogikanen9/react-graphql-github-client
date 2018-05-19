@@ -5,6 +5,7 @@
   "dependencies": {
     "@types/prop-types": "^15.5.2",
     "@uifabric/utilities": "^5.30.0",
+    "office-ui-fabric-core": "^9.6.0",
     "office-ui-fabric-react": "^5.95.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
