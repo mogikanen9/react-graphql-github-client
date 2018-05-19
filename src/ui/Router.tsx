@@ -17,10 +17,13 @@ class Router extends React.Component<IRouterProps, IRouterState>{
             isError: false,
             isLoading: false,
             repoPagination: EMPTY_PAGINATION,
+            repoPaginationKeyMap: new Map(),
             repositories: []
         }
 
         this.nextRepoPage = this.nextRepoPage.bind(this);
+        this.prevRepoPage = this.prevRepoPage.bind(this);
+        this.repoPage = this.repoPage.bind(this);
     }
 
     public componentDidMount() {
@@ -36,6 +39,8 @@ class Router extends React.Component<IRouterProps, IRouterState>{
                         repoPagination: new PaginationInfo(result.paginationInfo.nextPageCursor, ''),
                         repositories: result.repos,
                     });
+                const nextRepoCursorValue = result.paginationInfo.nextPageCursor ? result.paginationInfo.nextPageCursor : '';
+                this.state.repoPaginationKeyMap.set(nextRepoCursorValue, '');
             }).catch((err) => {
                 this.setState(
                     {
@@ -53,6 +58,7 @@ class Router extends React.Component<IRouterProps, IRouterState>{
 
         const props: IViewListProps = {
             onNext: this.nextRepoPage,
+            onPrev: this.prevRepoPage,
             orgName: 'spring-projects',
             repoPagination: this.state.repoPagination,
             repos: this.state.repositories
@@ -81,20 +87,42 @@ class Router extends React.Component<IRouterProps, IRouterState>{
     }
 
     protected nextRepoPage(): void {
+        this.repoPage(DEFAULT_PAGE_SIZE, this.state.repoPagination ? this.state.repoPagination.nextPageCursor : undefined);
+    }
+
+    protected prevRepoPage(): void {
+        const nextPageCursor = this.state.repoPagination.nextPageCursor ?
+            this.state.repoPagination.nextPageCursor : '';
+        const prevPageCursor =
+            this.state.repoPaginationKeyMap.get(nextPageCursor);
+        this.repoPage(DEFAULT_PAGE_SIZE, prevPageCursor);
+    }
+
+    protected repoPage(pageSize: number, paginationCursor?: string): void {
         this.setState({ isLoading: true });
-        this.props.clientService.listRepos(DEFAULT_PAGE_SIZE,
-            this.state.repoPagination ? this.state.repoPagination.nextPageCursor : undefined)
+        this.props.clientService.listRepos(pageSize, paginationCursor)
             .then((result: RepositoryResultList) => {
+                const existingNextRepoCursorValue =
+                    this.state.repoPagination.nextPageCursor ?
+                        this.state.repoPagination.nextPageCursor : '';
                 this.setState(
                     {
                         errorMessage: '',
                         isError: false,
                         isLoading: false,
                         // return nextCursor becomes next, existing next xursor becomes prev
-                        repoPagination: new PaginationInfo(result.paginationInfo.nextPageCursor, 
+                        repoPagination: new PaginationInfo(result.paginationInfo.nextPageCursor,
                             this.state.repoPagination.nextPageCursor),
                         repositories: result.repos,
                     });
+
+                if (result.paginationInfo.nextPageCursor &&
+                    result.paginationInfo.nextPageCursor !== ''
+                    && !this.state.repoPaginationKeyMap.has(result.paginationInfo.nextPageCursor)) {
+                    this.state.repoPaginationKeyMap.set(result.paginationInfo.nextPageCursor,
+                        existingNextRepoCursorValue);
+                }
+
             }).catch((err) => {
                 this.setState(
                     {

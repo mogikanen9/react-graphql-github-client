@@ -6,6 +6,7 @@ interface IViewListProps {
     repos: Repository[];
     repoPagination:PaginationInfo;
     onNext():void;
+    onPrev():void;
 }
 
 export { IViewListProps };

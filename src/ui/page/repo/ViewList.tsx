@@ -65,11 +65,11 @@ class ViewList extends React.Component<IViewListProps, {}> {
     }
 
     protected showNextPage(): void {
-       this.props.onNext();
+        this.props.onNext();
     }
 
     protected showPrevPage(): void {
-        // TODO
+        this.props.onPrev();
     }
 }
 

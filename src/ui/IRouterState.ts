@@ -7,6 +7,7 @@ interface IRouterState {
     isError: boolean;
     errorMessage?: string;
     repoPagination: PaginationInfo;
+    repoPaginationKeyMap: Map<string,string>;
 }
 
 export { IRouterState };
