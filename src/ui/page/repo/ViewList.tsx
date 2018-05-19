@@ -57,6 +57,7 @@ class ViewList extends React.Component<IViewListProps, {}> {
                     setKey='set'
                     compact={true}
                     selectionMode={SelectionMode.single}
+                  
                 />
                 <PaginationBar {...pagProps} />
                 <p>{this.props.paginationCursor}</p>

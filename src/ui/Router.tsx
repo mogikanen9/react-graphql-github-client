@@ -56,10 +56,10 @@ class Router extends React.Component<IRouterProps, IRouterState>{
             hasNextPage:
                 this.state.repoPagination ? this.state.repoPagination.hasNextPage : false,
             onNext: this.nextRepoPage,
-            orgName: 'spring-projects',            
+            orgName: 'spring-projects',
             paginationCursor:
-                this.state.repoPagination ? this.state.repoPagination.pageCursor : '',            
-            repos: this.state.repositories            
+                this.state.repoPagination ? this.state.repoPagination.pageCursor : '',
+            repos: this.state.repositories
         };
 
         if (this.state.isError) {
@@ -69,7 +69,16 @@ class Router extends React.Component<IRouterProps, IRouterState>{
         } else {
             return (
                 <>
-                    <ViewList {...props} />
+                    <div className="ms-Grid">
+                        <div className="ms-Grid-row">
+                            <div className="ms-Grid-col ms-sm12 ms-md2 ms-lg2"/>
+                            <div className="ms-Grid-col ms-sm12 ms-md8 ms-lg8">
+                                <ViewList {...props} />
+                            </div>
+                            <div className="ms-Grid-col ms-sm12 ms-md2 ms-lg2"/>
+                        </div>
+                    </div>
+
                 </>
             );
         };
@@ -78,7 +87,7 @@ class Router extends React.Component<IRouterProps, IRouterState>{
     protected nextRepoPage(): void {
         this.setState({ isLoading: true });
         this.props.clientService.listRepos(DEFAULT_PAGE_SIZE,
-            this.state.repoPagination?this.state.repoPagination.pageCursor:undefined)
+            this.state.repoPagination ? this.state.repoPagination.pageCursor : undefined)
             .then((result: RepositoryResultList) => {
                 this.setState(
                     {
