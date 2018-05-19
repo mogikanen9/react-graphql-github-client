@@ -11,8 +11,8 @@ class PaginationBar extends React.Component<IPaginationBarProps, {}> {
     public render() {
         return (
             <>
-                <DefaultButton text="<< Prev" />
-                <DefaultButton text="Next >>" onClick={this.props.onNext} />
+                <DefaultButton text="<< Prev" onClick={this.props.onPrev} disabled={!this.props.showPrev} />
+                <DefaultButton text="Next >>" onClick={this.props.onNext} disabled={!this.props.showNext} />
             </>
         );
     }

@@ -44,8 +44,8 @@ class ViewList extends React.Component<IViewListProps, {}> {
             {
                 onNext: this.showNextPage,
                 onPrev: this.showPrevPage,
-                showNext: this.props.hasNextPage,
-                showPrev: true
+                showNext: this.props.repoPagination.hasNextPage(),
+                showPrev: this.props.repoPagination.hasPrevPage()
             };
 
         return (
@@ -57,10 +57,9 @@ class ViewList extends React.Component<IViewListProps, {}> {
                     setKey='set'
                     compact={true}
                     selectionMode={SelectionMode.single}
-                  
+
                 />
                 <PaginationBar {...pagProps} />
-                <p>{this.props.paginationCursor}</p>
             </>
         );
     }

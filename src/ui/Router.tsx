@@ -6,7 +6,7 @@ import { ViewList } from '../ui/page/repo/ViewList';
 import { IRouterProps } from './IRouterProps';
 import { IRouterState } from './IRouterState';
 
-const EMPTY_PAGINATION: PaginationInfo = new PaginationInfo(false, '');
+const EMPTY_PAGINATION: PaginationInfo = new PaginationInfo('', '');
 const DEFAULT_PAGE_SIZE = 10;
 
 class Router extends React.Component<IRouterProps, IRouterState>{
@@ -14,7 +14,6 @@ class Router extends React.Component<IRouterProps, IRouterState>{
     constructor(props: IRouterProps) {
         super(props);
         this.state = {
-            ghAccessToken: '',
             isError: false,
             isLoading: false,
             repoPagination: EMPTY_PAGINATION,
@@ -34,7 +33,7 @@ class Router extends React.Component<IRouterProps, IRouterState>{
                         errorMessage: '',
                         isError: false,
                         isLoading: false,
-                        repoPagination: result.paginationInfo,
+                        repoPagination: new PaginationInfo(result.paginationInfo.nextPageCursor, ''),
                         repositories: result.repos,
                     });
             }).catch((err) => {
@@ -53,12 +52,9 @@ class Router extends React.Component<IRouterProps, IRouterState>{
     public render() {
 
         const props: IViewListProps = {
-            hasNextPage:
-                this.state.repoPagination ? this.state.repoPagination.hasNextPage : false,
             onNext: this.nextRepoPage,
             orgName: 'spring-projects',
-            paginationCursor:
-                this.state.repoPagination ? this.state.repoPagination.pageCursor : '',
+            repoPagination: this.state.repoPagination,
             repos: this.state.repositories
         };
 
@@ -71,11 +67,11 @@ class Router extends React.Component<IRouterProps, IRouterState>{
                 <>
                     <div className="ms-Grid">
                         <div className="ms-Grid-row">
-                            <div className="ms-Grid-col ms-sm12 ms-md2 ms-lg2"/>
+                            <div className="ms-Grid-col ms-sm12 ms-md2 ms-lg2" />
                             <div className="ms-Grid-col ms-sm12 ms-md8 ms-lg8">
                                 <ViewList {...props} />
                             </div>
-                            <div className="ms-Grid-col ms-sm12 ms-md2 ms-lg2"/>
+                            <div className="ms-Grid-col ms-sm12 ms-md2 ms-lg2" />
                         </div>
                     </div>
 
@@ -87,14 +83,16 @@ class Router extends React.Component<IRouterProps, IRouterState>{
     protected nextRepoPage(): void {
         this.setState({ isLoading: true });
         this.props.clientService.listRepos(DEFAULT_PAGE_SIZE,
-            this.state.repoPagination ? this.state.repoPagination.pageCursor : undefined)
+            this.state.repoPagination ? this.state.repoPagination.nextPageCursor : undefined)
             .then((result: RepositoryResultList) => {
                 this.setState(
                     {
                         errorMessage: '',
                         isError: false,
                         isLoading: false,
-                        repoPagination: result.paginationInfo,
+                        // return nextCursor becomes next, existing next xursor becomes prev
+                        repoPagination: new PaginationInfo(result.paginationInfo.nextPageCursor, 
+                            this.state.repoPagination.nextPageCursor),
                         repositories: result.repos,
                     });
             }).catch((err) => {
