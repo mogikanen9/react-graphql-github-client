@@ -1,10 +1,10 @@
-import { PaginationInfo } from "../../../service/model/PaginationInfo";
 import { Repository } from "../../../service/model/Repository";
+import { RepoPagination } from "./RepoPagination";
 
 interface IViewListProps {
     orgName: string;
     repos: Repository[];
-    repoPagination:PaginationInfo;
+    repoPagination:RepoPagination;
     onNext():void;
     onPrev():void;
 }

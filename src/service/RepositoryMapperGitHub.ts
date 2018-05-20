@@ -18,13 +18,8 @@ class RepositoryMapperGitHub implements IRepositoryMapper {
     }
 
     public paginationInfoFromJson(value: any): PaginationInfo {
-        const pageInfo: any = value.data.organization.repositories.pageInfo;
-        if(pageInfo.hasNextPage){
-            return new PaginationInfo(pageInfo.endCursor, pageInfo.endCursor);
-        }else{
-            return new PaginationInfo('', '');
-        }
-        
+        const pageInfo: any = value.data.organization.repositories.pageInfo;     
+        return new PaginationInfo(pageInfo.hasNextPage, pageInfo.endCursor);               
     }
 }
 

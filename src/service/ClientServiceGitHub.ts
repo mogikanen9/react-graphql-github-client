@@ -27,7 +27,8 @@ class ClientServiceGitHub implements IClientService {
     public listRepos(itemsPerPage: number, pageCursor?: string): Promise<RepositoryResultList> {
         return new Promise<RepositoryResultList>((resolve, reject) => {
 
-            const queryString = buildOrganizationRepoQuery(itemsPerPage, pageCursor);
+            const queryString = buildOrganizationRepoQuery(itemsPerPage, pageCursor);        
+
             fetch(GITHUB_API_V4,
                 {
                     body: JSON.stringify({ query: queryString }),

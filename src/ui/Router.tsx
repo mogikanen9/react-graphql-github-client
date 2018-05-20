@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { PaginationInfo } from '../service/model/PaginationInfo';
+import { EMPTY_PAGE_CURSOR, EMPTY_REPO_PAGINATION } from 'src/service/model/Constants';
 import { RepositoryResultList } from '../service/model/RepositoryResultList';
 import { IViewListProps } from '../ui/page/repo/IViewListProps';
 import { ViewList } from '../ui/page/repo/ViewList';
 import { IRouterProps } from './IRouterProps';
 import { IRouterState } from './IRouterState';
+import { RepoPagination } from './page/repo/RepoPagination';
 
-const EMPTY_PAGINATION: PaginationInfo = new PaginationInfo('', '');
 const DEFAULT_PAGE_SIZE = 10;
 
 class Router extends React.Component<IRouterProps, IRouterState>{
@@ -16,8 +16,7 @@ class Router extends React.Component<IRouterProps, IRouterState>{
         this.state = {
             isError: false,
             isLoading: false,
-            repoPagination: EMPTY_PAGINATION,
-            repoPaginationKeyMap: new Map(),
+            repoPagination: EMPTY_REPO_PAGINATION,
             repositories: []
         }
 
@@ -31,23 +30,26 @@ class Router extends React.Component<IRouterProps, IRouterState>{
         this.setState({ isLoading: true });
         this.props.clientService.listRepos(DEFAULT_PAGE_SIZE)
             .then((result: RepositoryResultList) => {
+
+                const pageCursors = this.state.repoPagination.pageCursors;
+                if (!pageCursors.has(result.paginationInfo.currentPageCursor)) {
+                    pageCursors.set(result.paginationInfo.currentPageCursor, EMPTY_PAGE_CURSOR);
+                }
                 this.setState(
                     {
                         errorMessage: '',
                         isError: false,
                         isLoading: false,
-                        repoPagination: new PaginationInfo(result.paginationInfo.nextPageCursor, ''),
+                        repoPagination: new RepoPagination(result.paginationInfo, pageCursors),
                         repositories: result.repos,
                     });
-                const nextRepoCursorValue = result.paginationInfo.nextPageCursor ? result.paginationInfo.nextPageCursor : '';
-                this.state.repoPaginationKeyMap.set(nextRepoCursorValue, '');
             }).catch((err) => {
                 this.setState(
                     {
                         errorMessage: err,
                         isError: true,
                         isLoading: false,
-                        repoPagination: EMPTY_PAGINATION
+                        repoPagination: EMPTY_REPO_PAGINATION
                     }
                 );
             });
@@ -87,41 +89,29 @@ class Router extends React.Component<IRouterProps, IRouterState>{
     }
 
     protected nextRepoPage(): void {
-        this.repoPage(DEFAULT_PAGE_SIZE, this.state.repoPagination ? this.state.repoPagination.nextPageCursor : undefined);
+        this.repoPage(DEFAULT_PAGE_SIZE, this.state.repoPagination.getCurPageCursor(), true);
     }
 
     protected prevRepoPage(): void {
-        const nextPageCursor = this.state.repoPagination.nextPageCursor ?
-            this.state.repoPagination.nextPageCursor : '';
-        const prevPageCursor =
-            this.state.repoPaginationKeyMap.get(nextPageCursor);
-        this.repoPage(DEFAULT_PAGE_SIZE, prevPageCursor);
+        this.repoPage(DEFAULT_PAGE_SIZE, this.state.repoPagination.getPrevPageCursor(), false);
     }
 
-    protected repoPage(pageSize: number, paginationCursor?: string): void {
+    protected repoPage(pageSize: number, paginationCursor: string, forward: boolean): void {
         this.setState({ isLoading: true });
         this.props.clientService.listRepos(pageSize, paginationCursor)
             .then((result: RepositoryResultList) => {
-                const existingNextRepoCursorValue =
-                    this.state.repoPagination.nextPageCursor ?
-                        this.state.repoPagination.nextPageCursor : '';
+                const pageCursors = this.state.repoPagination.pageCursors;
+                if (forward && !pageCursors.has(result.paginationInfo.currentPageCursor)) {
+                    pageCursors.set(result.paginationInfo.currentPageCursor, this.state.repoPagination.getCurPageCursor());
+                }
                 this.setState(
                     {
                         errorMessage: '',
                         isError: false,
                         isLoading: false,
-                        // return nextCursor becomes next, existing next xursor becomes prev
-                        repoPagination: new PaginationInfo(result.paginationInfo.nextPageCursor,
-                            this.state.repoPagination.nextPageCursor),
+                        repoPagination: new RepoPagination(result.paginationInfo, pageCursors),
                         repositories: result.repos,
                     });
-
-                if (result.paginationInfo.nextPageCursor &&
-                    result.paginationInfo.nextPageCursor !== ''
-                    && !this.state.repoPaginationKeyMap.has(result.paginationInfo.nextPageCursor)) {
-                    this.state.repoPaginationKeyMap.set(result.paginationInfo.nextPageCursor,
-                        existingNextRepoCursorValue);
-                }
 
             }).catch((err) => {
                 this.setState(
@@ -129,7 +119,7 @@ class Router extends React.Component<IRouterProps, IRouterState>{
                         errorMessage: err,
                         isError: true,
                         isLoading: false,
-                        repoPagination: EMPTY_PAGINATION
+                        repoPagination: EMPTY_REPO_PAGINATION
                     }
                 );
             });

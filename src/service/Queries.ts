@@ -1,6 +1,7 @@
-function buildOrganizationRepoQuery(itemsPerPage: number, cursorId?: string): string {
-  if(cursorId){
-  return `query OrganizationRepos {
+function buildOrganizationRepoQuery(itemsPerPage: number,
+  cursorId?: string): string {
+  if (cursorId) {
+    return `query OrganizationRepos {
     organization(login: "spring-projects") {
       name
       url
@@ -18,7 +19,7 @@ function buildOrganizationRepoQuery(itemsPerPage: number, cursorId?: string): st
         }
       }
     }
-  }`}else{
+  }`} else {
     return `query OrganizationForLearningReact {
       organization(login: "spring-projects") {
         name
