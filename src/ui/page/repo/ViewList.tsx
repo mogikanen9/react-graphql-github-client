@@ -6,7 +6,8 @@ import {
     IColumn,
     SelectionMode
 } from 'office-ui-fabric-react/lib/DetailsList';
-
+import { IPaginationBarProps } from '../../component/pagination/IPaginationBarProps';
+import { PaginationBar } from '../../component/pagination/PaginationBar';
 
 const VIEW_COLUMNS: IColumn[] = [
     {
@@ -33,9 +34,20 @@ class ViewList extends React.Component<IViewListProps, {}> {
 
     constructor(props: IViewListProps) {
         super(props);
+        this.showNextPage = this.showNextPage.bind(this);
+        this.showPrevPage = this.showPrevPage.bind(this);
     }
 
     public render() {
+
+        const pagProps: IPaginationBarProps =
+            {
+                onNext: this.showNextPage,
+                onPrev: this.showPrevPage,
+                showNext: this.props.repoPagination.hasNextPage(),
+                showPrev: this.props.repoPagination.hasPrevPage()
+            };
+
         return (
             <>
                 <h2> Organization {this.props.orgName} </h2>
@@ -45,9 +57,19 @@ class ViewList extends React.Component<IViewListProps, {}> {
                     setKey='set'
                     compact={true}
                     selectionMode={SelectionMode.single}
+
                 />
+                <PaginationBar {...pagProps} />
             </>
         );
+    }
+
+    protected showNextPage(): void {
+        this.props.onNext();
+    }
+
+    protected showPrevPage(): void {
+        this.props.onPrev();
     }
 }
 

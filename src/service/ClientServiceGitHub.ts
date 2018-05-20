@@ -1,7 +1,9 @@
 import { IClientService } from "./IClientService";
 import { IRepositoryMapper } from "./IRepositoryMapper";
+import { PaginationInfo } from "./model/PaginationInfo";
 import { Repository } from "./model/Repository";
-import { LIST_ORG_REPOS } from "./Queries";
+import { RepositoryResultList } from "./model/RepositoryResultList";
+import { buildOrganizationRepoQuery } from "./Queries";
 import { RepositoryMapperGitHub } from "./RepositoryMapperGitHub";
 
 const GITHUB_API_V4 = 'https://api.github.com/graphql';
@@ -22,12 +24,14 @@ class ClientServiceGitHub implements IClientService {
         this.mapper = new RepositoryMapperGitHub();
     }
 
-    public listRepos(): Promise<Repository[]> {
-        return new Promise<Repository[]>((resolve, reject) => {
+    public listRepos(itemsPerPage: number, pageCursor?: string): Promise<RepositoryResultList> {
+        return new Promise<RepositoryResultList>((resolve, reject) => {
+
+            const queryString = buildOrganizationRepoQuery(itemsPerPage, pageCursor);        
 
             fetch(GITHUB_API_V4,
                 {
-                    body: JSON.stringify({ query: LIST_ORG_REPOS }),
+                    body: JSON.stringify({ query: queryString }),
                     headers: {
                         'Authorization': 'bearer ' + this.ghAccessToken,
                         'content-type': 'application/json'
@@ -37,7 +41,8 @@ class ClientServiceGitHub implements IClientService {
                 .then((response) => {
                     response.json().then((data) => {
                         const repos: Repository[] = this.mapper.arrayfromJson(data);
-                        resolve(repos);
+                        const paginationInfo: PaginationInfo = this.mapper.paginationInfoFromJson(data);
+                        resolve(new RepositoryResultList(repos, paginationInfo));
                     }).catch((error) => {
                         throw new Error(error);
                     });

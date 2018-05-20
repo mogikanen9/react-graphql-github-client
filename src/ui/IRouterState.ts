@@ -1,11 +1,12 @@
 import { Repository } from "../service/model/Repository";
+import { RepoPagination } from "./page/repo/RepoPagination";
 
 interface IRouterState {
     isLoading: boolean;
     repositories: Repository[];
-    ghAccessToken:string;
     isError: boolean;
-    errorMessage?:string;
+    errorMessage?: string;
+    repoPagination: RepoPagination;
 }
 
 export { IRouterState };
