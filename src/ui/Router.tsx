@@ -8,6 +8,7 @@ import { IRouterState } from './IRouterState';
 import { RepoPagination } from './page/repo/RepoPagination';
 
 const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_ORG = "spring-projects";
 
 class Router extends React.Component<IRouterProps, IRouterState>{
 
@@ -28,7 +29,7 @@ class Router extends React.Component<IRouterProps, IRouterState>{
     public componentDidMount() {
 
         this.setState({ isLoading: true });
-        this.props.clientService.listRepos(DEFAULT_PAGE_SIZE)
+        this.props.clientService.listRepos(DEFAULT_ORG, DEFAULT_PAGE_SIZE)
             .then((result: RepositoryResultList) => {
 
                 const pageCursors = this.state.repoPagination.pageCursors;
@@ -98,7 +99,7 @@ class Router extends React.Component<IRouterProps, IRouterState>{
 
     protected repoPage(pageSize: number, paginationCursor: string, forward: boolean): void {
         this.setState({ isLoading: true });
-        this.props.clientService.listRepos(pageSize, paginationCursor)
+        this.props.clientService.listRepos(DEFAULT_ORG, pageSize, paginationCursor)
             .then((result: RepositoryResultList) => {
                 const pageCursors = this.state.repoPagination.pageCursors;
                 if (forward && !pageCursors.has(result.paginationInfo.currentPageCursor)) {

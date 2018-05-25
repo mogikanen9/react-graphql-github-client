@@ -24,10 +24,10 @@ class ClientServiceGitHub implements IClientService {
         this.mapper = new RepositoryMapperGitHub();
     }
 
-    public listRepos(itemsPerPage: number, pageCursor?: string): Promise<RepositoryResultList> {
+    public listRepos(orgName: string, itemsPerPage: number, pageCursor?: string): Promise<RepositoryResultList> {
         return new Promise<RepositoryResultList>((resolve, reject) => {
 
-            const queryString = buildOrganizationRepoQuery(itemsPerPage, pageCursor);        
+            const queryString = buildOrganizationRepoQuery(orgName, itemsPerPage, pageCursor);        
 
             fetch(GITHUB_API_V4,
                 {
