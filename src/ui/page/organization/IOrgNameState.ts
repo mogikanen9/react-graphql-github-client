@@ -1,6 +1,7 @@
-interface IOrgNameState{
+interface IOrgNameState {
     showDialog: boolean;
-    orgNameValue:string;
+    orgNameValue: string;
+    prevOrgNameValue: string;
 }
 
-export {IOrgNameState}
+export { IOrgNameState }

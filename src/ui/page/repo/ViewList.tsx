@@ -42,16 +42,16 @@ class ViewList extends React.Component<IViewListProps, {}> {
     public render() {
 
         const pagProps: IPaginationBarProps =
-            {
-                onNext: this.showNextPage,
-                onPrev: this.showPrevPage,
-                showNext: this.props.repoPagination.hasNextPage(),
-                showPrev: this.props.repoPagination.hasPrevPage()
-            };
+        {
+            onNext: this.showNextPage,
+            onPrev: this.showPrevPage,
+            showNext: this.props.repoPagination.hasNextPage(),
+            showPrev: this.props.repoPagination.hasPrevPage()
+        };
 
         return (
             <>
-                <OrgName orgName= {this.props.orgName} />
+                <OrgName orgName={this.props.orgName} orgNameChanged={this.props.onOrgNameChange} />
                 <DetailsList
                     items={this.props.repos}
                     columns={VIEW_COLUMNS}

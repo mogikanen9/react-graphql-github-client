@@ -1,5 +1,6 @@
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
 import * as React from 'react';
-import { EMPTY_PAGE_CURSOR, EMPTY_REPO_PAGINATION } from 'src/service/model/Constants';
+import { EMPTY_PAGE_CURSOR, EMPTY_REPO_PAGINATION } from '../service/model/Constants';
 import { RepositoryResultList } from '../service/model/RepositoryResultList';
 import { IViewListProps } from '../ui/page/repo/IViewListProps';
 import { ViewList } from '../ui/page/repo/ViewList';
@@ -14,6 +15,9 @@ class Router extends React.Component<IRouterProps, IRouterState>{
 
     constructor(props: IRouterProps) {
         super(props);
+
+        initializeIcons(/* optional base url */);
+
         this.state = {
             isError: false,
             isLoading: false,
@@ -24,6 +28,7 @@ class Router extends React.Component<IRouterProps, IRouterState>{
         this.nextRepoPage = this.nextRepoPage.bind(this);
         this.prevRepoPage = this.prevRepoPage.bind(this);
         this.repoPage = this.repoPage.bind(this);
+        this.orgNameChanged = this.orgNameChanged.bind(this);
     }
 
     public componentDidMount() {
@@ -61,7 +66,8 @@ class Router extends React.Component<IRouterProps, IRouterState>{
 
         const props: IViewListProps = {
             onNext: this.nextRepoPage,
-            onPrev: this.prevRepoPage,
+            onOrgNameChange: this.orgNameChanged,
+            onPrev: this.prevRepoPage,           
             orgName: 'spring-projects',
             repoPagination: this.state.repoPagination,
             repos: this.state.repositories
@@ -87,6 +93,11 @@ class Router extends React.Component<IRouterProps, IRouterState>{
                 </>
             );
         };
+    }
+
+    protected orgNameChanged(newOrgName: string): void {
+        // tslint:disable-next-line:no-console
+        console.log(`New orgName->${newOrgName}`);
     }
 
     protected nextRepoPage(): void {

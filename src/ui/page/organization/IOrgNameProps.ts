@@ -1,5 +1,6 @@
-interface IOrgNameProps{
-    orgName:string;
+interface IOrgNameProps {
+    orgName: string;
+    orgNameChanged(newOrgName:string): void;
 }
 
-export {IOrgNameProps};
+export { IOrgNameProps };

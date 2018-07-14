@@ -14,6 +14,7 @@ class OrgName extends React.Component<IOrgNameProps, IOrgNameState> {
         this.closeDialog = this.closeDialog.bind(this);
         this.state = {
             orgNameValue: this.props.orgName,
+            prevOrgNameValue: this.props.orgName,
             showDialog: false
         }
     }
@@ -24,7 +25,7 @@ class OrgName extends React.Component<IOrgNameProps, IOrgNameState> {
                 <h2> Organization {this.props.orgName}
                     <ActionButton
                         onClick={this.showDialog}
-                        iconProps={{ iconName: 'DrillThrough' }} >-</ActionButton>
+                        iconProps={{ iconName: 'DrillThrough' }} />
                 </h2>
                 <Dialog
                     dialogContentProps={{
@@ -43,7 +44,7 @@ class OrgName extends React.Component<IOrgNameProps, IOrgNameState> {
                         <TextField
                             label='Organization Name on GitHub'
                             onChanged={this.onOrgnameValueChange}
-                            value={this.props.orgName}
+                            value={this.state.orgNameValue}
                         />
                     </DialogContent>
                     <DialogFooter>
@@ -61,7 +62,9 @@ class OrgName extends React.Component<IOrgNameProps, IOrgNameState> {
 
     private closeDialog(): void {
         this.setState({ showDialog: false });
-        // this.props.onSubmit(this.state.tokenValue);
+        if (this.state.orgNameValue !== this.state.prevOrgNameValue) {
+            this.props.orgNameChanged(this.state.orgNameValue);
+        }
     }
 
     private showDialog(): void {
