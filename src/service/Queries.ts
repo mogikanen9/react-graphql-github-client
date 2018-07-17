@@ -1,8 +1,8 @@
-function buildOrganizationRepoQuery(itemsPerPage: number,
+function buildOrganizationRepoQuery(orgName: string, itemsPerPage: number,
   cursorId?: string): string {
   if (cursorId) {
     return `query OrganizationRepos {
-    organization(login: "spring-projects") {
+    organization(login: "${orgName}") {
       name
       url
       repositories(first: ${itemsPerPage}, after: "${cursorId}") {
@@ -21,7 +21,7 @@ function buildOrganizationRepoQuery(itemsPerPage: number,
     }
   }`} else {
     return `query OrganizationForLearningReact {
-      organization(login: "spring-projects") {
+      organization(login: "${orgName}") {
         name
         url
         repositories(first: ${itemsPerPage}) {

@@ -1,15 +1,15 @@
 {
   "name": "react-graphql-github",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
-    "@types/prop-types": "^15.5.2",
-    "@uifabric/utilities": "^5.30.0",
+    "@types/prop-types": "^15.5.3",
+    "@uifabric/utilities": "^5.33.0",
     "office-ui-fabric-core": "^9.6.0",
-    "office-ui-fabric-react": "^5.95.0",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
-    "react-scripts-ts": "2.15.1"
+    "office-ui-fabric-react": "^5.111.0",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-scripts-ts": "2.16.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",
@@ -19,8 +19,8 @@
   },
   "devDependencies": {
     "@types/jest": "^22.2.3",
-    "@types/node": "^9.6.7",
-    "@types/react": "^16.3.13",
+    "@types/node": "^9.6.18",
+    "@types/react": "^16.3.14",
     "@types/react-dom": "^16.0.5",
     "typescript": "^2.8.3"
   }

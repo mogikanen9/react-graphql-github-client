@@ -8,6 +8,7 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { IPaginationBarProps } from '../../component/pagination/IPaginationBarProps';
 import { PaginationBar } from '../../component/pagination/PaginationBar';
+import { OrgName } from '../organization/OrgName';
 
 const VIEW_COLUMNS: IColumn[] = [
     {
@@ -41,16 +42,16 @@ class ViewList extends React.Component<IViewListProps, {}> {
     public render() {
 
         const pagProps: IPaginationBarProps =
-            {
-                onNext: this.showNextPage,
-                onPrev: this.showPrevPage,
-                showNext: this.props.repoPagination.hasNextPage(),
-                showPrev: this.props.repoPagination.hasPrevPage()
-            };
+        {
+            onNext: this.showNextPage,
+            onPrev: this.showPrevPage,
+            showNext: this.props.repoPagination.hasNextPage(),
+            showPrev: this.props.repoPagination.hasPrevPage()
+        };
 
         return (
             <>
-                <h2> Organization {this.props.orgName} </h2>
+                <OrgName orgName={this.props.orgName} orgNameChanged={this.props.onOrgNameChange} />
                 <DetailsList
                     items={this.props.repos}
                     columns={VIEW_COLUMNS}

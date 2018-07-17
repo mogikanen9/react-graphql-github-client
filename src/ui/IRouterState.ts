@@ -7,6 +7,7 @@ interface IRouterState {
     isError: boolean;
     errorMessage?: string;
     repoPagination: RepoPagination;
+    selectedOrgName: string;
 }
 
 export { IRouterState };
