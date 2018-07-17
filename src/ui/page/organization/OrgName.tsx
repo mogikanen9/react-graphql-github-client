@@ -12,6 +12,8 @@ class OrgName extends React.Component<IOrgNameProps, IOrgNameState> {
         this.onOrgnameValueChange = this.onOrgnameValueChange.bind(this);
         this.showDialog = this.showDialog.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
+        this.saveChanges = this.saveChanges.bind(this);
+        this.cancelChanges = this.cancelChanges.bind(this);
         this.state = {
             orgNameValue: this.props.orgName,
             prevOrgNameValue: this.props.orgName,
@@ -22,14 +24,15 @@ class OrgName extends React.Component<IOrgNameProps, IOrgNameState> {
     public render() {
         return (
             <>
-                <h2> Organization {this.props.orgName}
-                    <ActionButton
-                        onClick={this.showDialog}
-                        iconProps={{ iconName: 'DrillThrough' }} />
-                </h2>
+                <div>
+                    <h2> Organization {this.props.orgName}
+                        <ActionButton
+                            onClick={this.showDialog}
+                            iconProps={{ iconName: 'DrillDownSolid' }} />
+                    </h2>
+                </div>
                 <Dialog
                     dialogContentProps={{
-                        // subText: 'Your Inbox has changed. No longer does it include favorites, it is a singular destination for your emails.',
                         title: 'Provide organization',
                         type: DialogType.normal
                     }}
@@ -48,8 +51,8 @@ class OrgName extends React.Component<IOrgNameProps, IOrgNameState> {
                         />
                     </DialogContent>
                     <DialogFooter>
-                        <PrimaryButton onClick={this.closeDialog} text='Save' />
-                        <DefaultButton onClick={this.closeDialog} text='Cancel' />
+                        <PrimaryButton onClick={this.saveChanges} text='Save' />
+                        <DefaultButton onClick={this.cancelChanges} text='Cancel' />
                     </DialogFooter>
                 </Dialog>
             </>
@@ -62,6 +65,16 @@ class OrgName extends React.Component<IOrgNameProps, IOrgNameState> {
 
     private closeDialog(): void {
         this.setState({ showDialog: false });
+
+    }
+
+    private cancelChanges(): void {
+        this.setState({ orgNameValue: this.state.prevOrgNameValue });
+        this.closeDialog();
+    }
+
+    private saveChanges(): void {
+        this.closeDialog();
         if (this.state.orgNameValue !== this.state.prevOrgNameValue) {
             this.props.orgNameChanged(this.state.orgNameValue);
         }
