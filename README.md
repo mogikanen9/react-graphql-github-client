@@ -1,5 +1,7 @@
 # react-graphql-github-client
 
+[![Build Status](https://travis-ci.org/mogikanen9/react-graphql-github-client.svg?branch=master)](https://travis-ci.org/mogikanen9/react-graphql-github-client)
+
 [![Coverage Status](https://coveralls.io/repos/github/mogikanen9/react-graphql-github-client/badge.svg?branch=master)](https://coveralls.io/github/mogikanen9/react-graphql-github-client?branch=master)
 
 GitHub client built with React.js based on [A complete React with GraphQL Tutorial](https://www.robinwieruch.de/react-with-graphql-tutorial/).
