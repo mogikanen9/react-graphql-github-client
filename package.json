@@ -14,9 +14,9 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "test:old": "react-scripts-ts test --env=jsdom",
+    "test": "react-scripts-ts test --env=jsdom",
     "test:junit": "cross-env CI=true react-scripts-ts test --env=jsdom --testResultsProcessor ./node_modules/jest-junit --coverage",
-    "test": "cross-env CI=true react-scripts-ts test --env=jsdom --testResultsProcessor ./node_modules/jest-sonar-reporter --coverage",
+    "test:ci": "cross-env CI=true react-scripts-ts test --env=jsdom --testResultsProcessor ./node_modules/jest-sonar-reporter --coverage",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
