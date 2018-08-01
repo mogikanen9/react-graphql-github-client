@@ -5,6 +5,8 @@
 
 # testing
 /coverage
+junit.xml
+test-report.xml
 
 # production
 /build
@@ -19,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.scannerwork
+run-sonar-scanner.bat

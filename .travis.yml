@@ -4,6 +4,10 @@ node_js:
 cache:
   directories:
     - node_modules
+addons:
+  sonarcloud:
+    organization: "mogikanen9-github"
 script:
   - npm run build
-  - npm test
+  - npm run test:ci
+  - sonar-scanner
