@@ -15,7 +15,8 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test:old": "react-scripts-ts test --env=jsdom",
-    "test": "cross-env CI=true react-scripts-ts test --env=jsdom --testResultsProcessor ./node_modules/jest-junit --coverage",
+    "test:junit": "cross-env CI=true react-scripts-ts test --env=jsdom --testResultsProcessor ./node_modules/jest-junit --coverage",
+    "test": "cross-env CI=true react-scripts-ts test --env=jsdom --testResultsProcessor ./node_modules/jest-sonar-reporter --coverage",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
@@ -26,6 +27,7 @@
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "jest-junit": "^5.0.0",
+    "jest-sonar-reporter": "^2.0.0",
     "typescript": "^2.8.3"
   },
   "jest": {
@@ -34,6 +36,7 @@
       "!<rootDir>/node_modules/"
     ],
     "coverageReporters": [
+      "lcov",
       "text",
       "html",
       "json",
