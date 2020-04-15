@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/mogikanen9/react-graphql-github-client.svg?branch=master)](https://travis-ci.org/mogikanen9/react-graphql-github-client)
 
+![Node.js CI](https://github.com/mogikanen9/react-graphql-github-client/workflows/Node.js%20CI/badge.svg)
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=react-graphql-client&metric=alert_status)](https://sonarcloud.io/dashboard?id=react-graphql-client)
 
 GitHub client built with React.js based on [A complete React with GraphQL Tutorial](https://www.robinwieruch.de/react-with-graphql-tutorial/).
