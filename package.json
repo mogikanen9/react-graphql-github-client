@@ -9,8 +9,8 @@
     "office-ui-fabric-react": "^5.131.1",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
-    "react-scripts": "1.1.5",
-    "react-scripts-ts": "2.16.0"
+    "react-scripts": "5.0.1",
+    "react-scripts-ts": "4.0.8"
   },
   "scripts": {
     "start": "react-scripts-ts start",
